@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         :root {
             --grass-green: #5d9e5d;
@@ -20,6 +19,7 @@
             --white: #ffffff;
             --light-gray: #f5f5f5;
             --gold: #ffd700;
+            --nether-red: #a52a2a;
         }
         
         * {
@@ -32,8 +32,24 @@
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
             color: var(--coal-black);
-            background-color: var(--light-gray);
+            background: linear-gradient(to bottom, #1a1a1a, #0a0a0a);
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Minecraft-style pixel background */
+        .pixel-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(var(--obsidian) 1px, transparent 1px),
+                linear-gradient(90deg, var(--obsidian) 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: -1;
+            opacity: 0.15;
         }
         
         h1, h2, h3, h4 {
@@ -66,6 +82,8 @@
             transition: all 0.3s ease;
             text-decoration: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
         }
         
         .btn:hover {
@@ -76,6 +94,22 @@
         
         .btn:active {
             transform: translateY(0);
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20px;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(25deg);
+            transition: all 0.4s;
+        }
+        
+        .btn:hover::after {
+            left: 120%;
         }
         
         .section {
@@ -121,6 +155,7 @@
             z-index: 1000;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--diamond-blue);
         }
         
         .header-container {
@@ -134,10 +169,30 @@
             font-weight: 700;
             color: var(--white);
             text-decoration: none;
+            display: flex;
+            align-items: center;
         }
         
-        .logo span {
-            color: var(--diamond-blue);
+        .logo .cube {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background: linear-gradient(135deg, var(--diamond-blue), #1c6ea4);
+            transform: rotate(45deg);
+            position: relative;
+            box-shadow: 0 0 10px rgba(47, 167, 214, 0.5);
+        }
+        
+        .logo .cube::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: rotate(-45deg);
         }
         
         nav ul {
@@ -195,14 +250,71 @@
             overflow: hidden;
             background: linear-gradient(135deg, var(--obsidian) 0%, #2c3e50 100%);
             color: var(--white);
+            border-bottom: 4px solid var(--dirt-brown);
         }
         
-        #particles-js {
+        .hero-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(93, 158, 93, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(47, 167, 214, 0.1) 0%, transparent 40%);
+            z-index: -1;
+        }
+        
+        .minecraft-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(var(--obsidian) 1px, transparent 1px),
+                linear-gradient(90deg, var(--obsidian) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .floating-blocks {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            display: flex;
+            z-index: -1;
+        }
+        
+        .block {
+            height: 40px;
+            background: var(--dirt-brown);
+            flex: 1;
+            margin: 0 2px;
+            position: relative;
+            transform: translateY(20px);
+            animation: floatBlock 6s infinite ease-in-out;
+            animation-delay: calc(var(--delay) * 1s);
+            border-radius: 4px;
+            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
+        }
+        
+        .block:nth-child(2n) {
+            background: var(--grass-green);
+            height: 60px;
+        }
+        
+        .block:nth-child(3n) {
+            background: var(--stone-gray);
+            height: 50px;
+        }
+        
+        @keyframes floatBlock {
+            0%, 100% { transform: translateY(20px); }
+            50% { transform: translateY(0px); }
         }
         
         .hero-content {
@@ -215,6 +327,7 @@
             font-size: 4rem;
             margin-bottom: 20px;
             line-height: 1.1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
         
         .hero-content h1 span {
@@ -232,6 +345,7 @@
             font-size: 1.2rem;
             margin-bottom: 40px;
             max-width: 600px;
+            color: rgba(255,255,255,0.9);
         }
         
         .contact-info {
@@ -283,7 +397,22 @@
         
         /* About Section */
         .about {
-            background-color: var(--white);
+            background-color: rgba(26, 26, 26, 0.8);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid var(--grass-green);
+        }
+        
+        .about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="rgba(93, 158, 93, 0.05)" width="50" height="50" x="0" y="0"/><rect fill="rgba(93, 158, 93, 0.05)" width="50" height="50" x="50" y="50"/></svg>');
+            background-size: 20px 20px;
+            z-index: -1;
         }
         
         .about-content {
@@ -294,17 +423,19 @@
         
         .about-text {
             flex: 1;
+            color: var(--white);
         }
         
         .about-text h3 {
             font-size: 1.8rem;
             margin-bottom: 20px;
-            color: var(--coal-black);
+            color: var(--diamond-blue);
         }
         
         .about-text p {
             margin-bottom: 25px;
             font-size: 1.1rem;
+            color: rgba(255,255,255,0.85);
         }
         
         .skills {
@@ -317,15 +448,18 @@
         .skill-item {
             display: flex;
             align-items: center;
-            background: var(--light-gray);
+            background: rgba(255, 255, 255, 0.1);
             padding: 15px 20px;
             border-radius: 8px;
             transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .skill-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: var(--diamond-blue);
         }
         
         .skill-item i {
@@ -334,9 +468,37 @@
             color: var(--diamond-blue);
         }
         
+        .skill-item h4 {
+            color: var(--white);
+            margin-bottom: 5px;
+        }
+        
+        .skill-item p {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 0;
+        }
+        
         /* Projects Section */
         .projects {
-            background-color: var(--light-gray);
+            background-color: rgba(15, 15, 15, 0.9);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid var(--stone-gray);
+        }
+        
+        .projects::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 49%, rgba(47, 167, 214, 0.05) 50%, transparent 51%),
+                linear-gradient(-45deg, transparent 49%, rgba(47, 167, 214, 0.05) 50%, transparent 51%);
+            background-size: 40px 40px;
+            z-index: -1;
         }
         
         .project-grid {
@@ -346,22 +508,26 @@
         }
         
         .project-card {
-            background: var(--white);
+            background: rgba(26, 26, 26, 0.8);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
         }
         
         .project-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--diamond-blue);
         }
         
         .project-header {
-            background: var(--diamond-blue);
+            background: linear-gradient(90deg, var(--diamond-blue), var(--grass-green));
             color: var(--white);
             padding: 20px;
+            text-align: center;
         }
         
         .project-header h3 {
@@ -371,11 +537,11 @@
         
         .project-body {
             padding: 25px;
+            color: rgba(255,255,255,0.85);
         }
         
         .project-body p {
             margin-bottom: 20px;
-            color: var(--coal-black);
         }
         
         .project-features {
@@ -395,6 +561,7 @@
         .project-features li {
             margin-bottom: 8px;
             position: relative;
+            color: rgba(255,255,255,0.8);
         }
         
         .project-features li::before {
@@ -406,13 +573,35 @@
         
         /* Contact Section */
         .contact {
-            background-color: var(--white);
+            background: 
+                linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.9)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="rgba(140, 109, 70, 0.2)" width="50" height="50" x="0" y="0"/><rect fill="rgba(140, 109, 70, 0.2)" width="50" height="50" x="50" y="50"/></svg>');
+            background-size: 30px 30px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid var(--diamond-blue);
+        }
+        
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 65%, rgba(47, 167, 214, 0.1) 75%, transparent 85%),
+                linear-gradient(-45deg, transparent 65%, rgba(47, 167, 214, 0.1) 75%, transparent 85%);
+            background-size: 50px 50px;
+            z-index: 0;
         }
         
         .contact-wrapper {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 50px;
+            position: relative;
+            z-index: 1;
         }
         
         .contact-info-section {
@@ -425,28 +614,41 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            background: rgba(26, 26, 26, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--diamond-blue);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
         
         .contact-icon {
             width: 60px;
             height: 60px;
-            background: var(--diamond-blue);
+            background: linear-gradient(135deg, var(--diamond-blue), #1c6ea4);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--white);
             font-size: 1.5rem;
+            flex-shrink: 0;
         }
         
         .contact-text h3 {
             font-size: 1.3rem;
             margin-bottom: 5px;
-            color: var(--coal-black);
+            color: var(--white);
         }
         
         .contact-text p, .contact-text a {
-            color: var(--stone-gray);
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
             transition: color 0.3s ease;
         }
@@ -456,10 +658,12 @@
         }
         
         .contact-form {
-            background: var(--light-gray);
+            background: rgba(26, 26, 26, 0.8);
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
         }
         
         .form-group {
@@ -470,17 +674,19 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: var(--coal-black);
+            color: var(--diamond-blue);
         }
         
         .form-control {
             width: 100%;
             padding: 14px;
-            border: 1px solid #ddd;
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 4px;
             font-size: 1rem;
             font-family: 'Poppins', sans-serif;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            background: rgba(10, 10, 10, 0.5);
+            color: var(--white);
         }
         
         .form-control:focus {
@@ -500,11 +706,53 @@
             color: var(--white);
             padding: 30px 0;
             text-align: center;
+            position: relative;
         }
         
         .footer-content p {
             font-size: 1rem;
             opacity: 0.8;
+        }
+        
+        .footer-cubes {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .footer-cube {
+            width: 30px;
+            height: 30px;
+            background: var(--diamond-blue);
+            transform: rotate(45deg);
+            position: relative;
+            opacity: 0.8;
+        }
+        
+        .footer-cube::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: rotate(-45deg);
+        }
+        
+        .footer-cube:nth-child(2) {
+            background: var(--grass-green);
+            transform: rotate(45deg) translateY(10px);
+        }
+        
+        .footer-cube:nth-child(3) {
+            background: var(--stone-gray);
+            transform: rotate(45deg) translateY(-10px);
         }
         
         /* Animations */
@@ -602,10 +850,15 @@
     </style>
 </head>
 <body>
+    <div class="pixel-bg"></div>
+    
     <!-- Header -->
     <header>
         <div class="container header-container">
-            <a href="#" class="logo">Kush<span>Dev</span></a>
+            <a href="#" class="logo">
+                <div class="cube"></div>
+                KushDev
+            </a>
             <nav>
                 <ul id="nav-menu">
                     <li><a href="#home">Home</a></li>
@@ -622,7 +875,18 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div id="particles-js"></div>
+        <div class="hero-bg"></div>
+        <div class="minecraft-grid"></div>
+        <div class="floating-blocks">
+            <div class="block" style="--delay:0"></div>
+            <div class="block" style="--delay:0.2"></div>
+            <div class="block" style="--delay:0.4"></div>
+            <div class="block" style="--delay:0.6"></div>
+            <div class="block" style="--delay:0.8"></div>
+            <div class="block" style="--delay:1.0"></div>
+            <div class="block" style="--delay:1.2"></div>
+            <div class="block" style="--delay:1.4"></div>
+        </div>
         <div class="container">
             <div class="hero-content">
                 <h1>Hey, I'm <span>Kush</span></h1>
@@ -828,87 +1092,17 @@
 
     <!-- Footer -->
     <footer>
+        <div class="footer-cubes">
+            <div class="footer-cube"></div>
+            <div class="footer-cube"></div>
+            <div class="footer-cube"></div>
+        </div>
         <div class="container footer-content">
             <p>© 2025 Kush. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Initialize Particles.js
-        document.addEventListener('DOMContentLoaded', function() {
-            particlesJS('particles-js', {
-                "particles": {
-                    "number": {
-                        "value": 80,
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": "#2fa7d6"
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        }
-                    },
-                    "opacity": {
-                        "value": 0.5,
-                        "random": false
-                    },
-                    "size": {
-                        "value": 3,
-                        "random": true
-                    },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 150,
-                        "color": "#5d9e5d",
-                        "opacity": 0.4,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 2,
-                        "direction": "none",
-                        "random": false,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false
-                    }
-                },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "grab"
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "push"
-                        },
-                        "resize": true
-                    },
-                    "modes": {
-                        "grab": {
-                            "distance": 140,
-                            "line_linked": {
-                                "opacity": 1
-                            }
-                        },
-                        "push": {
-                            "particles_nb": 4
-                        }
-                    }
-                },
-                "retina_detect": true
-            });
-        });
-
         // Mobile Navigation Toggle
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('nav-menu');
