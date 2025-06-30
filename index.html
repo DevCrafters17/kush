@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swaroop | Discord Bot Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --secondary: #5e17eb;
+            --dark: #0f0c29;
+            --darker: #080518;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --code-bg: #1e1e3f;
+            --card-bg: rgba(30, 30, 63, 0.7);
+            --header-height: 70px;
+            --success: #4CAF50;
+            --error: #F44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(15, 12, 41, 0.95);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+        }
+
+        header.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 25px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--light);
+            z-index: 1001;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            padding-top: var(--header-height);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.1) 0%, rgba(15, 12, 41, 0) 70%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 20px;
+            justify-self: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards 0.3s;
+        }
+
+        .hero h2 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 25px;
+            color: var(--primary);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards 0.5s;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 35px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards 0.7s;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards 0.9s;
+        }
+
+        .btn:hover {
+            background: transparent;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.3);
+        }
+
+        /* Particles */
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--darker);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .skills {
+            margin-top: 30px;
+        }
+
+        .skill {
+            margin-bottom: 20px;
+        }
+
+        .skill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            font-weight: 600;
+        }
+
+        .skill-percent {
+            color: var(--primary);
+        }
+
+        .skill-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+            position: relative;
+            width: 0;
+            transition: width 1.5s ease-in-out;
+        }
+
+        /* Work Section */
+        .work {
+            background: var(--dark);
+        }
+
+        .work-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .work-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .work-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .work-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .work-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .work-icon {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .work-description {
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .code-container {
+            background: var(--code-bg);
+            padding: 18px;
+            overflow-x: auto;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .language-tag {
+            background: rgba(138, 43, 226, 0.2);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary);
+        }
+
+        pre {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+        }
+
+        code {
+            color: #f8f8f2;
+            display: block;
+            white-space: pre;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--darker);
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .contact-icon {
+            font-size: 1.6rem;
+            color: var(--primary);
+            min-width: 40px;
+        }
+
+        .contact-text h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .contact-text p, .contact-text a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .contact-text a:hover {
+            color: var(--primary);
+        }
+
+        .contact-form {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #7a1ed9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(138, 43, 226, 0.3);
+        }
+
+        /* Form Messages */
+        .form-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .form-message.success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .form-message.error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            padding: 25px 0;
+            text-align: center;
+            border-top: 1px solid rgba(138, 43, 226, 0.1);
+        }
+
+        .copyright {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Optimizations */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3.2rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.6rem;
+            }
+            
+            .section-title {
+                font-size: 2.1rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: var(--header-height);
+                right: -100%;
+                flex-direction: column;
+                background: var(--darker);
+                width: 280px;
+                height: calc(100vh - var(--header-height));
+                padding: 40px 20px;
+                transition: right 0.4s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 20px 0;
+            }
+            
+            .nav-links a {
+                font-size: 1.1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.4rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.9rem;
+                margin-bottom: 40px;
+            }
+            
+            .work-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                min-height: 90vh;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.2rem;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.7rem;
+            }
+            
+            .about-text h3 {
+                font-size: 1.5rem;
+            }
+            
+            .contact-form {
+                padding: 20px;
+            }
+            
+            .work-header {
+                padding: 15px;
+            }
+            
+            .code-container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero-content {
+                padding: 10px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="https://discord.gg/4Ww4Ng7Xxe" class="logo">Dev<span>Crafters</span></a>
+                <div class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#work">Work</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div id="particles-js"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Swaroop</h1>
+                    <h2>Discord Bot Developer</h2>
+                    <p>I build custom Discord bots: tickets, verification, moderation, automation.</p>
+                    <a href="#contact" class="btn">Contact Me</a>
+                </div>
+            </div>     
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title fade-in">About Me</h2>
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <h3>Hello! I'm Swaroop</h3>
+                    <p>A 19-year-old developer with 3 years of experience building custom Discord bots. I specialize in creating robust, user-friendly solutions for Discord communities of all sizes.</p>
+                    <p>My expertise includes:</p>
+                    <ul style="margin: 20px 0 20px 30px;">
+                        <li>🎫 Ticket Systems</li>
+                        <li>✅ Verification Systems</li>
+                        <li>🛡️ Auto-Moderation</li>
+                        <li>🧰 Moderation Tools</li>
+                    </ul>
+                    <p>I have solid knowledge of <strong>Python</strong> and the Discord API, and I'm passionate about building reliable, user-friendly bots for your server.</p>
+                    
+                    <div class="skills">
+                        <h3 style="margin-bottom: 20px;">My Skills</h3>
+                        <div class="skill">
+                            <div class="skill-info">
+                                <span class="skill-name">Python</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-info">
+                                <span class="skill-name">Discord API</span>
+                                <span class="skill-percent">95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="95%"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-info">
+                                <span class="skill-name">JavaScript</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-info">
+                                <span class="skill-name">Bot Architecture</span>
+                                <span class="skill-percent">92%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="92%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section class="work" id="work">
+        <div class="container">
+            <h2 class="section-title fade-in">My Work</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 30px; font-size: 1.1rem;" class="fade-in">
+                Here are some examples of Discord bot systems I've developed:
+            </p>
+            
+            <div class="work-container">
+                <!-- Ticket System -->
+                <div class="work-card fade-in">
+                    <div class="work-header">
+                        <h3 class="work-title"><i class="fas fa-ticket-alt work-icon"></i> Ticket System</h3>
+                        <p class="work-description">Command to open private ticket channels with permissions.</p>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="language-tag">JavaScript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <pre><code>import { SlashCommandBuilder, PermissionFlagsBits, ChannelType } from 'discord.js';
+
+export default {
+  data: new SlashCommandBuilder()
+    .setName('ticket')
+    .setDescription('Open a private ticket channel')
+    .addStringOption(option =>
+      option.setName('reason').setDescription('Reason for the ticket').setRequired(true)
+    ),
+
+  async execute(interaction) {
+    const reason = interaction.options.getString('reason');
+
+    const ticketChannel = await interaction.guild.channels.create({
+      name: `ticket-${interaction.user.username}`,
+      type: ChannelType.GuildText,
+      permissionOverwrites: [
+        {
+          id: interaction.guild.roles.everyone,
+          deny: [PermissionFlagsBits.ViewChannel]
+        },
+        {
+          id: interaction.user.id,
+          allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
+        },
+        {
+          id: interaction.client.user.id,
+          allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
+        }
+      ]
+    });
+
+    await ticketChannel.send(
+      `🎫 Ticket opened by <@${interaction.user.id}> for **${reason}**. A staff member will help you soon.`
+    );
+
+    await interaction.reply({ content: `✅ Ticket created: ${ticketChannel}`, ephemeral: true });
+  }
+};</code></pre>
+                    </div>
+                </div>
+                
+                <!-- Auto-Moderation System -->
+                <div class="work-card fade-in">
+                    <div class="work-header">
+                        <h3 class="work-title"><i class="fas fa-shield-alt work-icon"></i> Auto-Moderation System</h3>
+                        <p class="work-description">Deletes messages containing banned words and warns users.</p>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="language-tag">JavaScript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <pre><code>export default {
+  name: 'messageCreate',
+  once: false,
+
+  async execute(message, client, config) {
+    if (!message.guild || message.author.bot) return;
+
+    const content = message.content.toLowerCase();
+    const matchedWord = config.badWords.find(word => content.includes(word));
+    if (!matchedWord) return;
+
+    try {
+      await message.delete();
+      await message.channel.send({
+        content: `⚠️ ${message.author}, please avoid using inappropriate language.`
+      });
+
+      console.log(`[AutoMod] Deleted message from ${message.author.tag} containing "${matchedWord}"`);
+
+      const logChannel = message.guild.channels.cache.find(
+        ch => ch.name === config.logChannel
+      );
+      if (logChannel) {
+        await logChannel.send({
+          content: `🛡️ **AutoMod**: Deleted a message from ${message.author} in ${message.channel}\n> **Content**: ||${message.content}||\n> **Reason**: Contains banned word "${matchedWord}"`
+        });
+      }
+    } catch (error) {
+      console.error('AutoMod error:', error);
+      await message.channel.send({
+        content: `⚠️ Could not delete message due to permissions.`,
+        ephemeral: true
+      }).catch(() => {});
+    }
+  }
+};</code></pre>
+                    </div>
+                </div>
+                
+                <!-- Welcome System -->
+                <div class="work-card fade-in">
+                    <div class="work-header">
+                        <h3 class="work-title"><i class="fas fa-hand-wave work-icon"></i> Welcome System</h3>
+                        <p class="work-description">Sends customizable welcome messages to new members.</p>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="language-tag">JavaScript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <pre><code>export default {
+  name: 'guildMemberAdd',
+  once: false,
+
+  async execute(member, client, config) {
+    try {
+      let channel = member.guild.systemChannel;
+      if (!channel && config.welcomeChannel) {
+        channel = member.guild.channels.cache.find(
+          ch => ch.name === config.welcomeChannel && ch.isTextBased()
+        );
+      }
+
+      if (!channel) {
+        console.log(`[Welcome] No channel found to send welcome for ${member.user.tag}`);
+        return;
+      }
+
+      const messageTemplate = config.welcomeMessage || "👋 Welcome, {user}!";
+      const finalMessage = messageTemplate.replace('{user}', `<@${member.id}>`);
+
+      await channel.send({ content: finalMessage });
+      console.log(`[Welcome] Sent welcome message for ${member.user.tag} in #${channel.name}`);
+    } catch (error) {
+      console.error('[Welcome] Failed to send welcome message:', error);
+    }
+  }
+};</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title fade-in">Contact Me</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="fade-in">
+                        <h3 style="font-size: 1.6rem; margin-bottom: 20px;">Let's Connect</h3>
+                        <p style="font-size: 1.05rem; margin-bottom: 25px;">I'm currently available for freelance work. If you have a project that you want to get started, think you need my help with something, or just want to say hello, then get in touch.</p>
+                    </div>
+                    
+                    <div class="contact-item fade-in">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h3>Email</h3>
+                            <a href="mailto:devcrafters.india@gmail.com">devcrafters.india@gmail.com</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item fade-in">
+                        <div class="contact-icon">
+                            <i class="fab fa-discord"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h3>Discord</h3>
+                            <p id="discord-id">devcrafters</p>
+                            <button class="copy-btn" onclick="copyDiscord()" style="margin-top: 10px; width: auto;">Copy ID</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form fade-in">
+                    <form id="contact-form" action="https://formspree.io/f/xblyqnqz" method="POST">
+                        <!-- Form messages container -->
+                        <div id="form-messages" class="form-message"></div>
+                        
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p class="copyright">© 2025 Swaroop. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 80) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+        
+        menuToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            menuToggle.innerHTML = navLinks.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Close menu when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const isClickInsideNav = navLinks.contains(event.target) || menuToggle.contains(event.target);
+            if (!isClickInsideNav && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Close mobile menu if open
+                navLinks.classList.remove('active');
+                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - document.getElementById('header').offsetHeight,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animate on scroll
+        function checkScroll() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const windowHeight = window.innerHeight;
+            
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('appear');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('load', checkScroll);
+
+        // Initialize particles
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 70,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#8a2be2"
+                },
+                "shape": {
+                    "type": "circle"
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": true
+                },
+                "size": {
+                    "value": 3,
+                    "random": true
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 140,
+                    "color": "#8a2be2",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                }
+            },
+            "retina_detect": true
+        });
+
+        // Animate skill bars
+        window.addEventListener('load', function() {
+            const skillBars = document.querySelectorAll('.skill-progress');
+            skillBars.forEach(bar => {
+                const width = bar.getAttribute('data-width');
+                bar.style.width = width;
+            });
+        });
+
+        // Copy Discord ID
+        function copyDiscord() {
+            navigator.clipboard.writeText("devcrafters")
+                .then(() => {
+                    const button = document.querySelector('#discord-id + .copy-btn');
+                    const originalText = button.textContent;
+                    button.textContent = "Copied!";
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    alert('Failed to copy Discord ID. Please try again.');
+                });
+        }
+
+        // Copy code to clipboard
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement.querySelector('code');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    button.textContent = "Copied!";
+                    setTimeout(() => {
+                        button.textContent = "Copy Code";
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    button.textContent = "Error!";
+                    setTimeout(() => {
+                        button.textContent = "Copy Code";
+                    }, 2000);
+                });
+        }
+
+        // Form submission with Formspree
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            const formMessages = document.getElementById('form-messages');
+            
+            // Show loading state
+            const submitBtn = this.querySelector('.submit-btn');
+            submitBtn.textContent = "Sending...";
+            submitBtn.disabled = true;
+            
+            // Prepare form data
+            const formData = new URLSearchParams();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('message', message);
+            
+            // Send to Formspree
+            fetch('https://formspree.io/f/xblyqnqz', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Success message
+                    formMessages.textContent = "✅ Thank you! Your message has been sent successfully.";
+                    formMessages.className = 'form-message success';
+                    formMessages.style.display = 'block';
+                    
+                    // Reset form
+                    this.reset();
+                } else {
+                    // Error message
+                    formMessages.textContent = "❌ There was a problem sending your message. Please try again.";
+                    formMessages.className = 'form-message error';
+                    formMessages.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                formMessages.textContent = "❌ An error occurred. Please try again later or contact me directly.";
+                formMessages.className = 'form-message error';
+                formMessages.style.display = 'block';
+            })
+            .finally(() => {
+                // Reset button
+                submitBtn.textContent = "Send Message";
+                submitBtn.disabled = false;
+                
+                // Scroll to message
+                formMessages.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    formMessages.style.display = 'none';
+                }, 8000);
+            });
+        });
+    </script>
+</body>
+</html>
